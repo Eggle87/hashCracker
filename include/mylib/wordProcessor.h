@@ -15,23 +15,28 @@ using namespace std;
  */
 vector<string> processFiles(string filePath);
 
+/**
+ * @brief Get the character set for a given mask character
+ * @param maskChar The mask character (l, u, d, h, H, s, a, b)
+ * @return Vector containing the characters for the specified mask
+ */
+vector<char> getCharsetForMask(char maskChar);
 
 /**
  * @brief Apply a given ruleset to a word
  * @param input The given word to apply the ruleset to
- * @return Vector contianing all of the outputted strings
+ * @param filePath Path to the ruleset file
+ * @return Vector containing all of the outputted strings
  */
-vector<string> applyRuleset(string input, string filePath){
-    
-}
+vector<string> applyRuleset(string input, string filePath);
+
 /**
  * @brief Apply a given mask to a word
  * @param input Given word to apply the mask to
  * @param mask Mask to apply
- * @returns Vector containing all of the ouputted strings
+ * @param position Position of the mask 1=Before input 0=After
+ * @return Vector containing all of the outputted strings
  */
-vector<string> hybridProcessor(string input, string mask){
-    
-}
+vector<string> hybridProcessor(string input, string mask, int position);
 #endif // WORDPROCESSOR_H
 
