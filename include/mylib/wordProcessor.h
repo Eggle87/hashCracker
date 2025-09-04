@@ -38,5 +38,13 @@ vector<string> applyRuleset(string input, string filePath);
  * @return Vector containing all of the outputted strings
  */
 vector<string> hybridProcessor(string input, string mask, int position);
+
+/**
+ * @brief Generate candidates based on a mask
+ * @param mask The mask to use
+ * @returns Vector containing generated candidates
+*/
+vector<string> maskProcessor(string mask) 
+
 #endif // WORDPROCESSOR_H
 

@@ -1,5 +1,6 @@
 #include "../include/mylib/wordProcessor.h"
 #include <fstream>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -77,58 +78,64 @@ vector<char> getCharsetForMask(char maskChar) {
     }
 }
 
-vector<string> generateCombinations(vector<vector<char>> charsets) {
-    if (charsets.empty()) return {""};
-    
+
+vector<string> generateCombinations(vector<vector<char>> charsets){
+    if(charsets.empty()) return {""};
+
     vector<string> results;
-    vector<int> indices(charsets.size(), 0);  // Start all at 0
-    
-    while (true) {
-        // Build current combination
+    vector<int> indices(charsets.size(),0); //Keep track of which char to put in each word
+
+    while(true){
         string combination = "";
-        for (int i = 0; i < charsets.size(); i++) {
-            combination += charsets[i][indices[i]];
+        for (int i=0;i<charsets.size();i++){
+            combination+=charsets[i][indices[i]]; //Build word based on indices
         }
         results.push_back(combination);
-        
-        // Increment indices 
-        int pos = charsets.size() - 1;
-        while (pos >= 0) {
-            indices[pos]++;
-            if (indices[pos] < charsets[pos].size()) {
-                break;  // No carry needed
+        //Set position variable to the last charset
+        int pos = charsets.size() -1; 
+        while(pos >=0){ //While we havent gone through all charsets
+            indices[pos]++; //Increase indices at that charset
+            if(indices[pos] < charsets[pos].size()){ //if the indices is less than the total size of charset, break
+                break;
             }
-            indices[pos] = 0;  // Reset and carry
-            pos--;
+            indices[pos] = 0; // Mark that we have gone through the whole charset
+            pos--; //go to next charset
         }
-        
-        if (pos < 0) break;  // All combinations generated
+        if(pos<0) break;
     }
-    
     return results;
 }
 
-
-vector<string> hybridProcessor(string input, string mask, int position) {
-    // Check mask validity
-
-    // Output vector
-    vector<string> transformedWords;
-    transformedWords.push_back(input);
-    // Loop through inputted mask
-    int maskLen = mask.length();
+vector<string> maskProcessor(string mask) {
+    // Decode mask to get character sets
     vector<vector<char>> decodedMask;
-    for (int i = 1; i < maskLen; i += 2) {
-        // Get charset
+    for (int i = 1; i < mask.length(); i += 2) {
         decodedMask.push_back(getCharsetForMask(mask[i]));
     }
-    vector<string> maskCombonations = generateCombinations(decodedMask);
-    int combNum = maskCombonations.size();
-    if(position=0){
-        for(int i=0;i<combNum;i++)
-        transformedWords.push_back(input+=maskCombonations.at(0));
-    } else{
-        transformedWords.push_back(maskCombonations.at(0)+=input);
-    }
-
+    
+    // Generate and return all combinations
+    return generateCombinations(decodedMask);
 }
+
+vector<string> hybridProcessor(string input, string mask, int position) {
+    // Output vector
+    vector<string> transformedWords;
+    
+    // Generate all mask combinations using the modular maskProcessor
+    vector<string> maskCombinations = maskProcessor(mask);
+    int combNum = maskCombinations.size();
+    
+    if(position==0){
+        // Append mask to input (input + mask)
+        for(int i=0;i<combNum;i++){
+            transformedWords.push_back(input + maskCombinations.at(i));
+        }
+    } else{
+        // Prepend mask to input (mask + input)
+        for(int i=0;i<combNum; i++){
+            transformedWords.push_back(maskCombinations.at(i) + input);
+        }
+    }
+    return transformedWords;
+}
+
