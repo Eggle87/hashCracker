@@ -78,7 +78,6 @@ vector<char> getCharsetForMask(char maskChar) {
     }
 }
 
-
 vector<string> generateCombinations(vector<vector<char>> charsets){
     if(charsets.empty()) return {""};
 
@@ -114,6 +113,7 @@ vector<string> generateCombinations(vector<vector<char>> charsets){
     }
     return results;
 }
+
 
 vector<string> maskProcessor(string mask) {
     // Decode mask to get character sets
