@@ -82,24 +82,33 @@ vector<char> getCharsetForMask(char maskChar) {
 vector<string> generateCombinations(vector<vector<char>> charsets){
     if(charsets.empty()) return {""};
 
+    // Calculate total combinations to pre-allocate
+    size_t totalCombinations = 1;
+    for(const auto& charset : charsets) {
+        totalCombinations *= charset.size();
+    }
+    
     vector<string> results;
-    vector<int> indices(charsets.size(),0); //Keep track of which char to put in each word
-
+    results.reserve(totalCombinations); // Pre-allocate memory
+    
+    vector<int> indices(charsets.size(),0);
+    
     while(true){
-        string combination = "";
+        string combination;
+        combination.reserve(charsets.size()); // Reserve string size
         for (int i=0;i<charsets.size();i++){
-            combination+=charsets[i][indices[i]]; //Build word based on indices
+            combination+=charsets[i][indices[i]];
         }
-        results.push_back(combination);
-        //Set position variable to the last charset
+        results.push_back(std::move(combination));
+        
         int pos = charsets.size() -1; 
-        while(pos >=0){ //While we havent gone through all charsets
-            indices[pos]++; //Increase indices at that charset
-            if(indices[pos] < charsets[pos].size()){ //if the indices is less than the total size of charset, break
+        while(pos >=0){
+            indices[pos]++;
+            if(indices[pos] < charsets[pos].size()){
                 break;
             }
-            indices[pos] = 0; // Mark that we have gone through the whole charset
-            pos--; //go to next charset
+            indices[pos] = 0;
+            pos--;
         }
         if(pos<0) break;
     }
@@ -112,7 +121,7 @@ vector<string> maskProcessor(string mask) {
     for (int i = 1; i < mask.length(); i += 2) {
         decodedMask.push_back(getCharsetForMask(mask[i]));
     }
-    
+  
     // Generate and return all combinations
     return generateCombinations(decodedMask);
 }

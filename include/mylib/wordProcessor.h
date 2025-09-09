@@ -44,7 +44,7 @@ vector<string> hybridProcessor(string input, string mask, int position);
  * @param mask The mask to use
  * @returns Vector containing generated candidates
 */
-vector<string> maskProcessor(string mask) 
+vector<string> maskProcessor(string mask);
 
 #endif // WORDPROCESSOR_H
 
